@@ -1,5 +1,6 @@
 *.pyc
 *.AppleDouble
+*.DS_STORE
 goshowdb
 settings.py
 *.log
