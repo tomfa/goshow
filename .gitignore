@@ -2,3 +2,6 @@
 *.AppleDouble
 goshowdb
 settings.py
+*.log
+*.pot
+local_settings.py
