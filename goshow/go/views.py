@@ -7,17 +7,22 @@ from django.core import serializers
 
 # When people go to www.webpage.com | POST: none
 def index(request):
+    try:
+        lists = list(List.objects.filter(user=request.user, removed=False))
+    except:
+        lists = ""
     context = {
         'title': 'Go!',
         'username': request.user.username,
+        'lists': lists,
     }
     return render(request, 'go/index.html', context)
 
 
 # Returns all the lists for a spesific user in an Lists-view | Post: none
-def getAllLists(request):
+def get_all_lists(request):
     try:
-        lists = List.objects.permitted_objects(user=request.user).filter(removed=False)
+        lists = List.objects.filter(user=request.user, removed=False)
     except (TypeError, List.DoesNotExist):
         if List.objects.filter(user=request.user, removed=False).count() == 0:
             # If user has no lists, we create example lists
@@ -32,7 +37,7 @@ def getAllLists(request):
 
 
 # Returns a serializes JSON-object of a spesific list | Post: list.key
-def getList(request):
+def get_list(request):
     try:
         key = request['id']  # Searches POST first, then GET
         list = List.objects.filter(pk=key)

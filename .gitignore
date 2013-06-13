@@ -1,6 +1,7 @@
 *.pyc
 *.AppleDouble
 *.DS_STORE
+*migrations
 goshowdb
 settings.py
 *.log
