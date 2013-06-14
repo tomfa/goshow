@@ -3,6 +3,8 @@ from django.http import Http404
 from django.shortcuts import render
 from go.models import List, ListItem
 from django.core import serializers
+from go.settings import GLOBALS
+from django.shortcuts import redirect
 
 
 # When people go to www.webpage.com | POST: none
@@ -12,7 +14,7 @@ def index(request):
     except:
         lists = ""
     context = {
-        'title': 'Go!',
+        'title': GLOBALS['title'],
         'username': request.user.username,
         'lists': lists,
     }
@@ -22,34 +24,66 @@ def index(request):
 # Returns all the lists for a spesific user in an Lists-view | Post: none
 def get_all_lists(request):
     try:
-        lists = List.objects.filter(user=request.user, removed=False)
+        if request.user.is_authenticated():
+            lists = list(List.objects.filter(user=request.user.pk, removed=False))
+        else:
+            return redirect('index')
     except (TypeError, List.DoesNotExist):
-        if List.objects.filter(user=request.user, removed=False).count() == 0:
+        if (List.objects.filter(user=request.user.pk, removed=False)):
             # If user has no lists, we create example lists
             createDefaultList(request)
         else:
             raise Http404
-
     return render(request, 'go/lists.html', {
-        'list': serializers.serialize("json", lists),
-        'user': request.user.username,
+        'title': GLOBALS['title'],
+        'lists': lists,
+        'jsonlist': serializers.serialize("json", lists),
+        'username': request.user.username,
     })
 
 
 # Returns a serializes JSON-object of a spesific list | Post: list.key
-def get_list(request):
+def get_list(request, key):
     try:
-        key = request['id']  # Searches POST first, then GET
-        list = List.objects.filter(pk=key)
-        if not (request.user == list.user or list.public):  # User has access
+        if request.user.is_authenticated():
+            lists = list(List.objects.filter(user=request.user.pk, removed=False))
+        else:
+            lists = ""
+        parent = List.objects.filter(pk=key)[0]
+        if not (request.user == parent.user or parent.public):  # User has access
             raise Http404
     except (TypeError, List.DoesNotExist):
         raise Http404
 
-    return render(request, 'go/individual_list.html'), {
-        'list': serializers.serialize("json", list),
-        'user': request.user.username,
-    }
+    listitems = ListItem.objects.filter(parent=parent).order_by('weight')
+
+    return render(request, 'go/individual_list.html', {
+        'title': GLOBALS['title'],
+        'lists': lists,
+        'listitems': listitems,
+        'jsonlistitems': serializers.serialize("json", listitems),
+        'username': request.user.username,
+    })
+
+
+# Returns page for registration
+def register(request):
+    return render(request, 'go/register.html', {
+        'title': GLOBALS['title'],
+        'username': request.user.username,
+    })
+
+
+def demo(request):
+    if request.user.is_authenticated():
+        lists = list(List.objects.filter(user=request.user.pk, removed=False))
+    else:
+        lists = ""
+    return render(request, 'go/demo.html', {
+        'title': GLOBALS['title'],
+        'username': request.user.username,
+        'lists': lists,
+    })
 
 
 # Skeleton for all the AJAX-operations

@@ -1,48 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Go!</title>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css">
-    <script src="{{ STATIC_URL }}js/jquery-latest.js"></script>
-    <script src="{{ STATIC_URL }}js/jquery-cookie.js"></script>
-    <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
-    </script>
+{% extends 'go/base.html' %}
 
-</head>
+{% block content %}
 
-<body>
-    <div class="navbar">
-      <div class="navbar-inner">
-        <a class="brand" href="#">{{ title }}</a>
-        <div class="nav-collapse collapse navbar-responsive-collapse">
-          <ul class="nav">
-          {% if username %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ username }}<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="./view/">Profile page</a></li>
-                <li><a class="add list" href="">Add list...</a></li>
-                {% if lists %}
-                <li class="divider"></li>
-                <li class="nav-header">Lists</li>
-                {% for list in lists %}
-                  <li><a href="./view/{{ list.pk }}">{{ list.title }}</a></li>
-                {% endfor %}
-                {% endif %}
-              </ul>
-            </li>
-          {% else %}
-            <li><a href="./register">Register</a></li>
-          {% endif %}
-            <li><a href="#">Demo</a></li>
-            <li><a href="#">About</a></li>
-        </div>
-        </ul>
-      </div>
-    </div>
-</body>
-</html>
+TODO: Makes them awesome sayings about what we believe in.<br />
+- All the things you dream about<br />
+- All the things you think you might want to do some day<br />
+- All the things that keeps bothering you that you haven't done yet<br />
+
+{% endblock %}
 
     

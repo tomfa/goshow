@@ -7,7 +7,7 @@ urlpatterns = patterns(
     '',
     # Examples:
     # url(r'^$', 'go.views.index', name='home'),
-    url(r'^goshow/', include('go.urls')),
+    url(r'^go/', include('go.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

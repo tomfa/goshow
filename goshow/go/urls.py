@@ -6,8 +6,10 @@ urlpatterns = patterns(
     '',
     url(r'^/?$', views.index, name='index'),
     # r = regex: ^: start, $: end,
-    url(r'view/^(?P<list_name>[\wæøå ._0-9-]+)$', views.get_list, name='listview'),
-    url('view/$', views.get_all_lists, name='all-listview'),
-    url('operate/$', views.operation, name='ajax-operations'),
+    url(r'^view/(?P<key>\d+)/$', views.get_list, name='listview'),
+    url('^view/$', views.get_all_lists, name='all-listview'),
+    url('^operate/$', views.operation, name='ajax-operations'),
+    url('^register/$', views.register, name='register'),
+    url('^demo/$', views.demo, name='demo'),
     # url(r'^edit$', views.edit, name='edit'),
 )

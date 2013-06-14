@@ -29,7 +29,7 @@ class ListItem(models.Model):
     checked = models.BooleanField(default=False)
     removed = models.BooleanField(default=False)
     parent = models.ForeignKey(List)
-    finishedDate = models.DateField(default=None)
+    finishedDate = models.DateField(default=None, null=True)
 
     def __unicode__(self):
         return unicode(self.title)
